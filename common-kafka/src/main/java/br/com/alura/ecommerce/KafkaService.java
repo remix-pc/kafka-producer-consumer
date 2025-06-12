@@ -10,9 +10,10 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
 
-class KafkaService<T> implements Closeable {
+public class KafkaService<T> implements Closeable {
     private final KafkaConsumer<String, T> consumer;
     private final ConsumerFunction parse;
 
@@ -37,7 +38,11 @@ class KafkaService<T> implements Closeable {
             if (!records.isEmpty()) {
                 System.out.println("Encontrei " + records.count() + " registros");
                 for (var record : records) {
-                    parse.consume(record);
+                    try {
+                        parse.consume(record);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }
@@ -50,6 +55,7 @@ class KafkaService<T> implements Closeable {
         properties.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, GsonDeserializer.class.getName());
         properties.setProperty(ConsumerConfig.GROUP_ID_CONFIG, groupId);
         properties.setProperty(ConsumerConfig.CLIENT_ID_CONFIG, UUID.randomUUID().toString());
+        properties.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         properties.setProperty(GsonDeserializer.TYPE_CONFIG, type.getName());
         properties.putAll(overrideProperties);
         return properties;
