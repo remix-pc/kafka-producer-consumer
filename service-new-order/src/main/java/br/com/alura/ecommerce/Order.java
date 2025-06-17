@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 public class Order {
 
-    private final String  orderId;
+    private final String orderId;
     private final BigDecimal amount;
     private final String email;
 
