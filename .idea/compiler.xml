@@ -8,7 +8,9 @@
         <outputRelativeToContentRoot value="true" />
         <module name="serviceemail" />
         <module name="service-http-ecommerce" />
+        <module name="service-email-new-order" />
         <module name="service-reading-report" />
+        <module name="common-database" />
         <module name="servicefrauddetector" />
         <module name="service-fraud-detector" />
         <module name="service-email" />
